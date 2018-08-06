@@ -3,12 +3,21 @@ package com.corrado.offersapp
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.InputStream
 
 class MainActivity : AppCompatActivity() {
+
+    var TAG = this.callingPackage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,8 +25,20 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            try {
+                val inputStream: InputStream = assets.open("Offers.json")
+                val inputString = inputStream.bufferedReader().use{ it.readText() }
+                val gson = Gson()
+                val jsonArray = JSONArray(inputString)
+                for (i in 0..(jsonArray.length() - 1)) {
+                    val item = jsonArray.getJSONObject(i)
+                    val offerData = gson.fromJson(item.toString(), OfferData::class.java)
+                    Log.d(TAG,offerData.toString())
+                }
+                Log.d(TAG,inputString)
+            } catch (e:Exception){
+                Log.d(TAG, e.message)
+            }
         }
     }
 
