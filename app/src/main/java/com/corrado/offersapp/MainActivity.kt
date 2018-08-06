@@ -1,28 +1,36 @@
 package com.corrado.offersapp
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
-
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
-import org.json.JSONObject
 import java.io.InputStream
 
 class MainActivity : AppCompatActivity() {
 
     var TAG = this.callingPackage
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewManager: RecyclerView.LayoutManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        viewManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+        }
 
         fab.setOnClickListener { view ->
             try {
@@ -30,11 +38,17 @@ class MainActivity : AppCompatActivity() {
                 val inputString = inputStream.bufferedReader().use{ it.readText() }
                 val gson = Gson()
                 val jsonArray = JSONArray(inputString)
+                val offers = ArrayList<OfferData>()
+
                 for (i in 0..(jsonArray.length() - 1)) {
                     val item = jsonArray.getJSONObject(i)
                     val offerData = gson.fromJson(item.toString(), OfferData::class.java)
                     Log.d(TAG,offerData.toString())
+                    offers.add(offerData)
                 }
+
+                viewAdapter = OffersAdapter(offers)
+                recyclerView.adapter = viewAdapter
                 Log.d(TAG,inputString)
             } catch (e:Exception){
                 Log.d(TAG, e.message)
