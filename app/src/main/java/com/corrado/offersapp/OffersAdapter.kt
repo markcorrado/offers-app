@@ -1,11 +1,13 @@
 package com.corrado.offersapp
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.Picasso
 
 class OffersAdapter(private val myDataset: ArrayList<OfferData>) : RecyclerView.Adapter<OffersAdapter.ViewHolder>() {
 
@@ -22,8 +24,9 @@ class OffersAdapter(private val myDataset: ArrayList<OfferData>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.offerTextView.text = myDataset[position].name
+        holder.offerTextView.text = myDataset[position].currentValue
         holder.descriptionTextView.text = myDataset[position].description
+        Picasso.get().load(myDataset[position].url).placeholder(R.drawable.ic_launcher_background).into(holder.imageView)
     }
 
     override fun getItemCount() = myDataset.size
