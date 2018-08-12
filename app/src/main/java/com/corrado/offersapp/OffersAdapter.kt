@@ -8,12 +8,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 
-class OffersAdapter(private val myDataset: ArrayList<OfferData>) : RecyclerView.Adapter<OffersAdapter.ViewHolder>() {
+class OffersAdapter(private val myDataset: ArrayList<OfferData>, private val clickListener: (OfferData) -> Unit) : RecyclerView.Adapter<OffersAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView = view.findViewById(R.id.image_view) as ImageView
         val amountTextView = view.findViewById(R.id.amount_text_view) as TextView
         val nameTextView = view.findViewById(R.id.name_text_view) as TextView
+
+        fun bind(offer: OfferData, clickListener: (OfferData) -> Unit) {
+            amountTextView.text = offer.currentValue
+            nameTextView.text = offer.description
+            itemView.setOnClickListener{clickListener(offer)}
+
+//          Using Picasso to load the image. Is this good enough?
+            Picasso.get().load(offer.url).placeholder(R.drawable.ic_launcher_background).into(imageView)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,9 +32,7 @@ class OffersAdapter(private val myDataset: ArrayList<OfferData>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.amountTextView.text = myDataset[position].currentValue
-        holder.nameTextView.text = myDataset[position].description
-        Picasso.get().load(myDataset[position].url).placeholder(R.drawable.ic_launcher_background).into(holder.imageView)
+        holder.bind(myDataset[position], clickListener)
     }
 
     override fun getItemCount() = myDataset.size

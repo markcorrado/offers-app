@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/offersFragment">
+    <fragment
+        android:id="@+id/offerDetailFragment"
+        android:name="com.corrado.offersapp.OfferDetailFragment"
+        android:label="fragment_offer_detail"
+        tools:layout="@layout/fragment_offer_detail" >
+    </fragment>
+    <fragment
+        android:id="@+id/offersFragment"
+        android:name="com.corrado.offersapp.OffersFragment"
+        android:label="fragment_offers"
+        tools:layout="@layout/fragment_offers" >
+        <action
+            android:id="@+id/action_offersFragment_to_offerDetailFragment"
+            app:destination="@id/offerDetailFragment" />
+    </fragment>
 </navigation>
