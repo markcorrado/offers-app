@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="4dp">
+    android:layout_margin="12dp">
 
     <ImageView
         android:id="@+id/image_view"
@@ -21,10 +21,10 @@
 
     <TextView
         android:id="@+id/amount_text_view"
+        style="@style/HeaderTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text=""
-        style="@style/AmountTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image_view"
@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/name_text_view"
-        style="@style/NameTextView"
+        style="@style/HeaderTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/description_text_view"
-        style="@style/NameTextView"
+        style="@style/BodyTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,7 @@
 
     <TextView
         android:id="@+id/terms_text_view"
-        style="@style/NameTextView"
+        style="@style/BodyTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/favorite"
+        android:textOn="@string/favorited"
+        android:textOff="@string/tap_to_favorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/terms_text_view"/>
+        app:layout_constraintTop_toBottomOf="@id/terms_text_view" />
 </android.support.constraint.ConstraintLayout>
