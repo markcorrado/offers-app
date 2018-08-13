@@ -11,8 +11,9 @@ data class OfferData(@PrimaryKey(autoGenerate = true) var id: Long?,
                      @ColumnInfo(name = "name") var name: String,
                      @ColumnInfo(name = "description") var description: String,
                      @ColumnInfo(name = "terms") var terms: String,
-                     @SerializedName("current_value") @ColumnInfo(name = "current_value") var currentValue: String
+                     @SerializedName("current_value") @ColumnInfo(name = "current_value") var currentValue: String,
+                     @ColumnInfo(name = "favorite") var isFavorite: Boolean
                      )
 {
-    constructor():this(null, "", "", "", "", "")
+    constructor():this(null, "", "", "", "", "", false)
 }

@@ -2,7 +2,6 @@ package com.corrado.offersapp
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.Navigation
 import com.google.gson.Gson
 import org.json.JSONArray
@@ -29,8 +27,8 @@ class OffersFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: GridLayoutManager
     private lateinit var workerThread: WorkerThread
-    private val handler = Handler()
     private var db: OfferDataBase? = null
+    private val uiHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +47,14 @@ class OffersFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = viewManager
         }
-        updateUI(view)
 
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        checkOfferDataInDatabase()
     }
 
     override fun onDestroy() {
@@ -60,7 +63,7 @@ class OffersFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun updateUI(view: View) {
+    private fun readJson() {
         try {
             val inputStream: InputStream? = this.context?.assets?.open("Offers.json")
             val inputString = inputStream?.bufferedReader().use{ it?.readText() }
@@ -76,12 +79,16 @@ class OffersFragment : Fragment() {
                 insertOfferDataInDatabase(offerData)
             }
 
-            viewAdapter = OffersAdapter(offers) { offerItem : OfferData -> offerItemClicked(view, offerItem) }
-            recyclerView.adapter = viewAdapter
+            updateUI(view, offers)
             Log.d(TAG,inputString)
         } catch (e:Exception){
             Log.d(TAG, e.message)
         }
+    }
+
+    private fun updateUI(view: View?, offers: ArrayList<OfferData>) {
+        viewAdapter = OffersAdapter(offers) { offerItem : OfferData -> offerItemClicked(view!!, offerItem) }
+        recyclerView.adapter = viewAdapter
     }
 
     private fun insertOfferDataInDatabase(offerData: OfferData) {
@@ -89,9 +96,21 @@ class OffersFragment : Fragment() {
         workerThread.postTask(task)
     }
 
+    private fun checkOfferDataInDatabase() {
+        val task = Runnable {
+            val offerDatas = db?.offerDataDao()?.getAll()
+            uiHandler.post {
+                if(offerDatas?.isEmpty()!!){
+                    readJson()
+                } else {
+                    updateUI(view, offerDatas as ArrayList<OfferData>)
+                }
+            }
+        }
+        workerThread.postTask(task)
+    }
 
     private fun offerItemClicked(view: View, offerItem : OfferData) {
-        Toast.makeText(this.context, "Clicked: ${offerItem.name}", Toast.LENGTH_LONG).show()
         val bundle = Bundle()
         bundle.putLong("offerId", offerItem.id!!)
         Navigation.findNavController(view).navigate(R.id.action_offersFragment_to_offerDetailFragment, bundle)

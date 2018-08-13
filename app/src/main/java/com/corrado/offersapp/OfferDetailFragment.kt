@@ -6,10 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.squareup.picasso.Picasso
 
 /**
@@ -23,9 +20,11 @@ class OfferDetailFragment : Fragment() {
     private lateinit var descriptionTextView: TextView
     private lateinit var termsTextView: TextView
     private lateinit var valueTextView: TextView
+    private lateinit var favoriteToggleButton: ToggleButton
     private var db: OfferDataBase? = null
     private val uiHandler = Handler()
     private var offerId: Long? = 0
+    private var offerData: OfferData? = null
     private lateinit var workerThread: WorkerThread
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +44,13 @@ class OfferDetailFragment : Fragment() {
         descriptionTextView = view.findViewById(R.id.description_text_view)
         termsTextView = view.findViewById(R.id.terms_text_view)
         valueTextView = view.findViewById(R.id.amount_text_view)
-        val favoriteButton = view.findViewById(R.id.favorite_button) as Button
-        favoriteButton.setOnClickListener { v ->
-            Toast.makeText(v.context, offerId.toString(), Toast.LENGTH_SHORT).show()
+        favoriteToggleButton = view.findViewById(R.id.favorite_button) as ToggleButton
+        favoriteToggleButton.setOnCheckedChangeListener{view, isChecked ->
+            offerData?.let {
+                it.isFavorite = isChecked
+                val task = Runnable { db?.offerDataDao()?.updateOfferData(offerData!!) }
+                workerThread.postTask(task)
+            }
         }
         return view
     }
@@ -64,21 +67,23 @@ class OfferDetailFragment : Fragment() {
 
     private fun getOfferDataFromDatabase(offerId: Long?) {
         val task = Runnable {
-            val offerData = db?.offerDataDao()?.getOfferDataById(offerId!!)
+            offerData = db?.offerDataDao()?.getOfferDataById(offerId!!)
             uiHandler.post {
-                updateUI(offerData!!)
+                updateUI()
             }
         }
         workerThread.postTask(task)
     }
 
-    private fun updateUI(offerData: OfferData) {
-        valueTextView.text = offerData.currentValue
-        nameTextView.text = offerData.name
-        descriptionTextView.text = offerData.description
-        termsTextView.text = offerData.terms
-
+    private fun updateUI() {
+        offerData?.let {
+            valueTextView.text = it.currentValue
+            nameTextView.text = it.name
+            descriptionTextView.text = it.description
+            termsTextView.text = it.terms
+            favoriteToggleButton.isChecked = it.isFavorite
 //          Using Picasso to load the image. Is this good enough?
-        Picasso.get().load(offerData.url).placeholder(R.drawable.ic_launcher_background).into(imageView)
+            Picasso.get().load(it.url).placeholder(R.drawable.ic_launcher_background).into(imageView)
+        }
     }
 }

@@ -60,11 +60,11 @@
         app:layout_constraintTop_toBottomOf="@id/description_text_view"
         tools:text="Terms" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/favorite_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Favorite"
+        android:text="@string/favorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/terms_text_view"/>

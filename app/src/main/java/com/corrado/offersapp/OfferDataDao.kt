@@ -1,9 +1,6 @@
 package com.corrado.offersapp
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 
 @Dao
 interface OfferDataDao {
@@ -18,4 +15,7 @@ interface OfferDataDao {
 
     @Query("DELETE from offerData")
     fun deleteAll()
+
+    @Update
+    fun updateOfferData(offerData: OfferData)
 }

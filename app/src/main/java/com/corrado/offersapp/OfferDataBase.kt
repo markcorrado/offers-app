@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import java.security.AccessControlContext
 
-@Database(entities = arrayOf(OfferData::class), version = 2)
+@Database(entities = arrayOf(OfferData::class), version = 3)
 abstract class OfferDataBase : RoomDatabase() {
     abstract fun offerDataDao(): OfferDataDao
 

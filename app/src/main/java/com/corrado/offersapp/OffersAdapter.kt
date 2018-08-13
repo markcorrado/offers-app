@@ -14,10 +14,16 @@ class OffersAdapter(private val offers: ArrayList<OfferData>, private val clickL
         val imageView = view.findViewById(R.id.image_view) as ImageView
         val amountTextView = view.findViewById(R.id.amount_text_view) as TextView
         val nameTextView = view.findViewById(R.id.name_text_view) as TextView
+        val favoriteImageView = view.findViewById(R.id.fav_icon) as ImageView
 
         fun bind(offer: OfferData, clickListener: (OfferData) -> Unit) {
             amountTextView.text = offer.currentValue
             nameTextView.text = offer.name
+            if(offer.isFavorite) {
+                favoriteImageView.visibility = View.VISIBLE
+            } else {
+                favoriteImageView.visibility = View.GONE
+            }
             itemView.setOnClickListener{clickListener(offer)}
 
 //          Using Picasso to load the image. Is this good enough?
