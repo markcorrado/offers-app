@@ -3,6 +3,7 @@ package com.corrado.offersapp
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ class OfferDetailFragment : Fragment() {
     private lateinit var termsTextView: TextView
     private lateinit var valueTextView: TextView
     private lateinit var favoriteToggleButton: ToggleButton
+    private lateinit var toolbar: Toolbar
     private var db: OfferDataBase? = null
     private val uiHandler = Handler()
     private var offerId: Long? = 0
@@ -39,6 +41,7 @@ class OfferDetailFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_offer_detail, container, false)
+        toolbar = view.findViewById(R.id.toolbar)
         imageView = view.findViewById(R.id.image_view)
         nameTextView = view.findViewById(R.id.name_text_view)
         descriptionTextView = view.findViewById(R.id.description_text_view)
@@ -77,6 +80,7 @@ class OfferDetailFragment : Fragment() {
 
     private fun updateUI() {
         offerData?.let {
+            toolbar.title = it.name
             valueTextView.text = it.currentValue
             nameTextView.text = it.name
             descriptionTextView.text = it.description

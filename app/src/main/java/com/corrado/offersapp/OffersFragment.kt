@@ -5,6 +5,7 @@ import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +28,7 @@ class OffersFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: GridLayoutManager
     private lateinit var workerThread: WorkerThread
+    private lateinit var toolbar: Toolbar
     private var db: OfferDataBase? = null
     private val uiHandler = Handler()
 
@@ -43,6 +45,8 @@ class OffersFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_offers, container, false)
 
         viewManager = GridLayoutManager(this.context, 2)
+        toolbar = view.findViewById(R.id.toolbar)
+        toolbar.title = "Offers"
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
