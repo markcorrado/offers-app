@@ -5,6 +5,10 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+/**
+ * An OfferData object. Values are filled from the JSON file besides favorite,
+ * which is local to the app
+ */
 @Entity(tableName = "offerData")
 data class OfferData(@PrimaryKey(autoGenerate = true) var id: Long?,
                      @ColumnInfo(name = "url") var url: String?,

@@ -6,6 +6,9 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import java.security.AccessControlContext
 
+/**
+ * Room Dao used to setup Database. See Room Persistence Library documentation
+ */
 @Database(entities = arrayOf(OfferData::class), version = 3)
 abstract class OfferDataBase : RoomDatabase() {
     abstract fun offerDataDao(): OfferDataDao
@@ -18,6 +21,7 @@ abstract class OfferDataBase : RoomDatabase() {
                 synchronized(OfferDataBase::class) {
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
                             OfferDataBase::class.java, "offer.db")
+                            //TODO: Should add migrations when data structure is finalized.
                             .fallbackToDestructiveMigration()
                             .build()
                 }

@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso
 /**
  * A simple [Fragment] subclass.
  * Displays the details of an Offer
+ * Is passed a offerId and uses that to query the DB and display the result
+ * Allows the user to toggle a favorite
  */
 class OfferDetailFragment : Fragment() {
 
@@ -50,6 +52,7 @@ class OfferDetailFragment : Fragment() {
         favoriteToggleButton = view.findViewById(R.id.favorite_button) as ToggleButton
         favoriteToggleButton.setOnCheckedChangeListener{view, isChecked ->
             offerData?.let {
+                //Updating OfferData's favorite and saving in db
                 it.isFavorite = isChecked
                 val task = Runnable { db?.offerDataDao()?.updateOfferData(offerData!!) }
                 workerThread.postTask(task)
@@ -68,6 +71,9 @@ class OfferDetailFragment : Fragment() {
         getOfferDataFromDatabase(offerId)
     }
 
+    /**
+     * Gets the OfferData from DB and updates UI
+     */
     private fun getOfferDataFromDatabase(offerId: Long?) {
         val task = Runnable {
             offerData = db?.offerDataDao()?.getOfferDataById(offerId!!)
