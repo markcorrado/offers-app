@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 
-class OffersAdapter(private val myDataset: ArrayList<OfferData>, private val clickListener: (OfferData) -> Unit) : RecyclerView.Adapter<OffersAdapter.ViewHolder>() {
+class OffersAdapter(private val offers: ArrayList<OfferData>, private val clickListener: (OfferData) -> Unit) : RecyclerView.Adapter<OffersAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView = view.findViewById(R.id.image_view) as ImageView
@@ -32,8 +32,8 @@ class OffersAdapter(private val myDataset: ArrayList<OfferData>, private val cli
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(myDataset[position], clickListener)
+        holder.bind(offers[position], clickListener)
     }
 
-    override fun getItemCount() = myDataset.size
+    override fun getItemCount() = offers.size
 }

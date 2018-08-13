@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import java.security.AccessControlContext
 
-@Database(entities = arrayOf(OfferData::class), version = 1)
+@Database(entities = arrayOf(OfferData::class), version = 2)
 abstract class OfferDataBase : RoomDatabase() {
     abstract fun offerDataDao(): OfferDataDao
 
@@ -18,6 +18,7 @@ abstract class OfferDataBase : RoomDatabase() {
                 synchronized(OfferDataBase::class) {
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
                             OfferDataBase::class.java, "offer.db")
+                            .fallbackToDestructiveMigration()
                             .build()
                 }
             }

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "offerData")
 data class OfferData(@PrimaryKey(autoGenerate = true) var id: Long?,
-                     @ColumnInfo(name = "url") var url: String,
+                     @ColumnInfo(name = "url") var url: String?,
                      @ColumnInfo(name = "name") var name: String,
                      @ColumnInfo(name = "description") var description: String,
                      @ColumnInfo(name = "terms") var terms: String,

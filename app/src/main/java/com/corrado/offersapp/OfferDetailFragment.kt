@@ -1,6 +1,7 @@
 package com.corrado.offersapp
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,11 +23,18 @@ class OfferDetailFragment : Fragment() {
     private lateinit var descriptionTextView: TextView
     private lateinit var termsTextView: TextView
     private lateinit var valueTextView: TextView
+    private var db: OfferDataBase? = null
+    private val uiHandler = Handler()
     private var offerId: Long? = 0
+    private lateinit var workerThread: WorkerThread
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         offerId = arguments?.getLong("offerId")
+        db = OfferDataBase.getInstance(this.context!!)
+
+        workerThread = WorkerThread("workerThread")
+        workerThread.start()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +52,33 @@ class OfferDetailFragment : Fragment() {
         return view
     }
 
+    override fun onDestroy() {
+        workerThread.quit()
+        super.onDestroy()
+    }
+
     override fun onStart() {
         super.onStart()
-//        Picasso.get().load(offer.url).placeholder(R.drawable.ic_launcher_background).into(imageView)
+        getOfferDataFromDatabase(offerId)
+    }
+
+    private fun getOfferDataFromDatabase(offerId: Long?) {
+        val task = Runnable {
+            val offerData = db?.offerDataDao()?.getOfferDataById(offerId!!)
+            uiHandler.post {
+                updateUI(offerData!!)
+            }
+        }
+        workerThread.postTask(task)
+    }
+
+    private fun updateUI(offerData: OfferData) {
+        valueTextView.text = offerData.currentValue
+        nameTextView.text = offerData.name
+        descriptionTextView.text = offerData.description
+        termsTextView.text = offerData.terms
+
+//          Using Picasso to load the image. Is this good enough?
+        Picasso.get().load(offerData.url).placeholder(R.drawable.ic_launcher_background).into(imageView)
     }
 }
