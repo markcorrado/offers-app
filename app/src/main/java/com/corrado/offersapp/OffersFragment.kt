@@ -29,9 +29,6 @@ class OffersFragment : Fragment() {
     private lateinit var viewManager: GridLayoutManager
     private lateinit var floatingActionButton: FloatingActionButton
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -71,6 +68,8 @@ class OffersFragment : Fragment() {
 
     private fun offerItemClicked(view: View, offerItem : OfferData) {
         Toast.makeText(this.context, "Clicked: ${offerItem.name}", Toast.LENGTH_LONG).show()
-        Navigation.findNavController(view).navigate(R.id.action_offersFragment_to_offerDetailFragment)
+        val bundle = Bundle()
+        bundle.putLong("offerId", offerItem.id!!)
+        Navigation.findNavController(view).navigate(R.id.action_offersFragment_to_offerDetailFragment, bundle)
     }
 }

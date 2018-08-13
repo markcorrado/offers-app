@@ -5,12 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/offersFragment">
     <fragment
-        android:id="@+id/offerDetailFragment"
-        android:name="com.corrado.offersapp.OfferDetailFragment"
-        android:label="fragment_offer_detail"
-        tools:layout="@layout/fragment_offer_detail" >
-    </fragment>
-    <fragment
         android:id="@+id/offersFragment"
         android:name="com.corrado.offersapp.OffersFragment"
         android:label="fragment_offers"
@@ -18,5 +12,14 @@
         <action
             android:id="@+id/action_offersFragment_to_offerDetailFragment"
             app:destination="@id/offerDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/offerDetailFragment"
+        android:name="com.corrado.offersapp.OfferDetailFragment"
+        android:label="fragment_offer_detail"
+        tools:layout="@layout/fragment_offer_detail" >
+        <argument
+            android:name="offerId"
+            android:defaultValue="0" />
     </fragment>
 </navigation>

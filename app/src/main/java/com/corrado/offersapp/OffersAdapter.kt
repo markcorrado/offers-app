@@ -17,7 +17,7 @@ class OffersAdapter(private val myDataset: ArrayList<OfferData>, private val cli
 
         fun bind(offer: OfferData, clickListener: (OfferData) -> Unit) {
             amountTextView.text = offer.currentValue
-            nameTextView.text = offer.description
+            nameTextView.text = offer.name
             itemView.setOnClickListener{clickListener(offer)}
 
 //          Using Picasso to load the image. Is this good enough?
